@@ -1,0 +1,17 @@
+{
+  "name": "sdlc",
+  "version": "0.1.0",
+  "description": "An Opus orchestrator that takes homelab apps through requirements, design, mockups, build, review, QA and release. Each stage goes to an Opus or Sonnet subagent, and the pipeline stops for your sign-off at four gates.",
+  "author": {
+    "name": "chauhanprateek89"
+  },
+  "repository": "https://github.com/chauhanprateek89/sdlc-orchestrator",
+  "license": "MIT",
+  "keywords": [
+    "sdlc",
+    "orchestrator",
+    "multi-agent",
+    "homelab",
+    "workflow"
+  ]
+}

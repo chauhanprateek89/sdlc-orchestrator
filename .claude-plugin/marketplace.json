@@ -1,0 +1,16 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "homelab",
+  "description": "Personal plugins for building and running homelab apps",
+  "owner": {
+    "name": "chauhanprateek89"
+  },
+  "plugins": [
+    {
+      "name": "sdlc",
+      "description": "An Opus orchestrator that takes homelab apps through requirements, design, mockups, build, review, QA and release, with your sign-off at four gates.",
+      "source": "./",
+      "category": "development"
+    }
+  ]
+}

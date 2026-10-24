@@ -1,0 +1,25 @@
+{
+  "name": "",
+  "mainBranch": "main",
+  "git": {
+    "remote": "origin",
+    "httpsUrl": ""
+  },
+  "commands": {
+    "start": ".sdlc/init.sh",
+    "stop": "",
+    "test": "",
+    "lint": "",
+    "format": ""
+  },
+  "urls": {
+    "local": "",
+    "live": "",
+    "health": ""
+  },
+  "release": {
+    "workflow": "",
+    "deployLagMinutes": 5,
+    "versionMarker": ""
+  }
+}
