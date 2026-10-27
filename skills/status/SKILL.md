@@ -4,13 +4,14 @@ description: "Show where the sdlc pipeline stands in this repository: track, sta
 allowed-tools:
   - Read
   - Bash(cat *)
+  - Bash(jq *)
   - Bash(git *)
 ---
 
 # Pipeline status
 
 - Status: !`cat .sdlc/STATUS.md 2>/dev/null || echo "NOT ONBOARDED"`
-- Tasks: !`cat .sdlc/features.json 2>/dev/null || echo "{}"`
+- Tasks: !`jq -r '.tasks[] | [.id, .title, .model, .review, .passes] | @tsv' .sdlc/features.json 2>/dev/null || echo "none"`
 - Branch: !`git branch --show-current 2>/dev/null`
 
 If the status says NOT ONBOARDED, reply with one line: this repo isn't in the pipeline yet; run `/sdlc:orchestrate onboard`.

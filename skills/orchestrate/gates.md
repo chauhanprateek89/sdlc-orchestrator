@@ -34,7 +34,8 @@ Gate 3 has no recommended option: deploying is the user's call.
 ## After the answer
 
 - Record it in `docs/decisions.md`: date, gate, decision, and the user's own words if they typed any.
-- **Approve:** go to the next stage.
+- **Approve:** update STATUS (the stage, "Next step" and a log line), then end the session. Say that the decision is saved and that the user should run `/clear`, then `/sdlc:orchestrate resume`, to start the next stage in a fresh session. Don't start the next stage here. A fresh session starts from STATUS alone, while this one re-reads everything said so far on every turn, and has to rebuild its whole cache whenever the user has been away for a while.
+- **Merge now (Gate 3):** merge, run the live check and finish the track in this session; the remaining steps are short.
 - **Changes:** send the change to the stage that owns it (product, architect or uiux), then come back to the same gate.
 - **Stop:** set STATUS to "Stopped at Gate N" and end.
 - Silence or a vague reply is never approval.

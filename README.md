@@ -32,9 +32,11 @@ Restart Claude Code to load it. After changing the plugin, run `claude plugin ma
 | --- | --- |
 | `skills/orchestrate/` | The orchestrator: `SKILL.md`, the gate protocol, one recipe per track, and the templates copied into each app |
 | `skills/status/` | A read-only status summary |
-| `agents/` | product, architect (Opus) · uiux, builder, qa, release (Sonnet) · reviewer (Opus) |
+| `agents/` | product, architect (Opus) · uiux, builder, qa, release (Sonnet) · reviewer (the model of the task it reviews) |
 | `workflows/` | `build.js` (build, then two-stage review per task, with escalation to Opus) and `qa.js` (each requirement against the running app) |
 
 ## Requires
+
+Workflows switched on: `"env": {"CLAUDE_CODE_WORKFLOWS": "1"}` in `~/.claude/settings.json`. Without it there is no Workflow tool, and the orchestrator stops at Build and QA.
 
 User-scope MCP servers `playwright` and `chrome-devtools` (QA, UI/UX, release), the `context7` plugin (architect, builder), the `frontend-design` plugin (UI/UX), and an authenticated `gh` CLI.

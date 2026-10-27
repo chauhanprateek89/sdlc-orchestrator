@@ -27,7 +27,7 @@ Update `docs/HLD.md` for the requirements in your dispatch, setting status to "p
 
 ## Mode: plan
 
-Turn the requirements in your dispatch into tasks in `.sdlc/features.json`, appended after existing tasks:
+Turn the requirements in your dispatch into tasks in `.sdlc/features.json`, appended after existing tasks. Task ids keep counting from the highest id in `.sdlc/features.json` and `.sdlc/archive/`. Read requirements one at a time by id (`awk '/^### R-069 /{p=1;print;next} p&&/^##/{exit} p' docs/requirements.md`), not the whole file.
 
 ```json
 {"id": "T-001", "title": "Reverse lookup endpoint", "requirements": ["R-014"], "track": "full",
@@ -36,7 +36,7 @@ Turn the requirements in your dispatch into tasks in `.sdlc/features.json`, appe
  "model": "sonnet", "dependsOn": [], "review": "pending", "passes": false}
 ```
 
-- One task is one reviewable commit: a few minutes of focused work for a skilled developer, with exact files and acceptance criteria copied from the requirements.
+- One task is one reviewable commit: a few minutes of focused work for a skilled developer, with exact files and acceptance criteria copied from the requirements. Never write a catch-all task ("cleanup", "polish", "leftovers"); split it into tasks with their own criteria.
 - Order the tasks so each one's `dependsOn` comes earlier.
 - Set `model` by the routing rules in your dispatch. `opus` goes to auth or host guard, schema or data migration, concurrency, CI or deploy config, or cost.
 - Name the mockup file for UI tasks.

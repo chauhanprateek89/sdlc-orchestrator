@@ -1,7 +1,7 @@
 export const meta = {
   name: 'build',
   description: 'Build the planned tasks one at a time on the feature branch. Each task gets a two-stage review; after two failed reviews it is rebuilt on Opus.',
-  whenToUse: 'Run by the sdlc orchestrator after the Plan stage. args: { repoRoot, branch, tasks: [{ id, title, requirements, files, acceptance, mockup, model }] }.',
+  whenToUse: 'Run by the sdlc orchestrator after the Plan stage. args: { repoRoot, branch, tasks: [{ id, title, requirements, files, acceptance, mockup, notes, model }] }.',
   phases: [
     { title: 'Build', detail: 'one builder per task, in order' },
     { title: 'Review', detail: 'spec compliance, then code quality' },
@@ -45,6 +45,7 @@ Branch: ${branch}
 Requirements: ${(t.requirements || []).join(', ') || '(none)'} (read them in docs/requirements.md)
 Files: ${(t.files || []).join(', ') || '(see .sdlc/features.json)'}
 Mockup: ${t.mockup || 'none'}
+Notes: ${t.notes || 'none'}
 Acceptance criteria:
 ${list(t.acceptance)}`
 
@@ -57,10 +58,11 @@ ${list(r.qualityIssues)}`).join('\n\n')
 const build = (model, prompt, label) =>
   agent(prompt, { label, phase: 'Build', agentType: 'sdlc:builder', model, schema: builderSchema })
 
-// The reviewer gets the task and the branch, never the builder's summary.
-const review = t =>
+// The reviewer gets the task and the branch, never the builder's summary. It runs on
+// the same model as the build it checks, so an Opus task (or an escalation) gets an Opus review.
+const review = (t, model) =>
   agent(`Review task ${t.id} on branch ${branch} in ${repoRoot}.\n\n${brief(t)}\n\nReview only the commits whose message starts "${t.id}:". Write .sdlc/reviews/${t.id}.md and return your verdict.`,
-    { label: `review ${t.id}`, phase: 'Review', agentType: 'sdlc:reviewer', schema: reviewSchema })
+    { label: `review ${t.id}`, phase: 'Review', agentType: 'sdlc:reviewer', model, schema: reviewSchema })
 
 const results = []
 for (const t of tasks) {
@@ -73,7 +75,7 @@ for (const t of tasks) {
       outcome = { id: t.id, outcome: 'blocked', model, blocker: built ? built.blocker || built.summary : 'the builder returned nothing', reviews: reviews.length }
       break
     }
-    const verdict = await review(t)
+    const verdict = await review(t, model)
     if (verdict && verdict.verdict === 'pass') {
       outcome = { id: t.id, outcome: 'passed-review', model, commits: built.commits, reviews: reviews.length + 1, nits: verdict.nits || [] }
       break

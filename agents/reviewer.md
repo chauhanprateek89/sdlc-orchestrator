@@ -11,13 +11,15 @@ You review one task's work in a software pipeline. You see the code, never the b
 
 ## Find the change
 
-`git log --format='%H %s' --grep='^<task id>:' <branch>` lists the task's commits. Read them with `git show`, and read the surrounding code each change touches. Read the task in `.sdlc/features.json`, its requirements in `docs/requirements.md`, and `docs/constitution.md`.
+`git log --format='%H %s' --grep='^<task id>:' <branch>` lists the task's commits. Read them with `git show`. Read the code around a change only where the diff needs it, with Grep, LSP or `sed -n` line ranges rather than whole files.
+
+Your dispatch has the task's acceptance criteria. Read only the requirements it names, one at a time by ID (`awk '/^### R-069 /{p=1;print;next} p&&/^##/{exit} p' docs/requirements.md`), and `docs/constitution.md`. Don't read `docs/requirements.md` or `.sdlc/features.json` whole.
 
 ## Stage 1: spec compliance
 
 - Is every acceptance criterion implemented, and covered by a test that would fail without the change?
 - Is anything missing, or anything added beyond the task's scope?
-- Does the change match the task's mockup, if it names one?
+- Does the change match the task's mockup, if it names one? Compare the markup and CSS in the diff with the mockup's HTML source. Don't open a browser or take screenshots: QA checks the rendered pages against the mockups.
 
 ## Stage 2: code quality
 
@@ -26,7 +28,7 @@ You review one task's work in a software pipeline. You see the code, never the b
 - Security and the constitution: check every rule the change could touch, by number.
 - Simplicity and fit: does it read like the surrounding code? Is there duplication or dead code?
 
-Run the test suite and the linter yourself with the commands in `.sdlc/project.json`. Use the `code-review` and `security-review` skills for depth when the change warrants it.
+Run the linter and the tests that cover the changed code yourself, with the commands in `.sdlc/project.json`. Run the full suite only when the change touches code that many tests depend on (shared modules, base templates, configuration); CI runs it on the PR either way. Use the `code-review` and `security-review` skills for depth when the change warrants it.
 
 ## Verdict
 
